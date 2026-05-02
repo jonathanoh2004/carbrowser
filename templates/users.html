@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Users</h1>
+<div class="section">
+    <h2>Add User</h2>
+    <form method="POST" action="/users/add">
+        Name: <input name="name" required>
+        Email: <input name="email" type="email" required>
+        Password: <input name="password" type="password" required>
+        <button type="submit">Add User</button>
+    </form>
+</div>
+<div class="section">
+    <h2>All Users</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Email</th><th>Lists</th><th>Action</th></tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.u_userid }}</td>
+            <td>{{ u.u_name }}</td>
+            <td>{{ u.u_email }}</td>
+            <td>{{ u.list_count }}</td>
+            <td>
+                <form method="POST" action="/users/delete/{{ u.u_userid }}" style="display:inline">
+                    <button type="submit" onclick="return confirm('Delete this user?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

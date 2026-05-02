@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Lists</h1>
+<div class="section">
+    <h2>Create New List</h2>
+    <form method="POST" action="/lists/add">
+        User:
+        <select name="user_id">
+            {% for u in users %}
+            <option value="{{ u.u_userid }}">{{ u.u_name }}</option>
+            {% endfor %}
+        </select>
+        List Name: <input name="list_name" required>
+        <button type="submit">Create</button>
+    </form>
+</div>
+<div class="section">
+    <h2>All Lists</h2>
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Owner</th><th>Cars</th>
+            <th>Avg Price ($)</th><th>Max HP</th><th>Fastest 0-60</th><th>Actions</th></tr>
+        {% for l in lists %}
+        <tr>
+            <td>{{ l.l_listid }}</td>
+            <td><a href="/lists/{{ l.l_listid }}">{{ l.l_listname }}</a></td>
+            <td>{{ l.u_name }}</td>
+            <td>{{ l.item_count }}</td>
+            <td>{{ l.avg_price or 'N/A' }}</td>
+            <td>{{ l.max_hp or 'N/A' }}</td>
+            <td>{{ l.fastest_60 or 'N/A' }}</td>
+            <td>
+                <form method="POST" action="/lists/delete/{{ l.l_listid }}" style="display:inline">
+                    <button type="submit" onclick="return confirm('Delete this list?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

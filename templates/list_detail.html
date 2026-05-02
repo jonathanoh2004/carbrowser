@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ list_info.l_listname }}</h1>
+<p>Owner: {{ list_info.u_name }} | <a href="/lists">Back to Lists</a></p>
+
+<div class="section">
+    <h2>List Stats</h2>
+    <span class="stat"><strong>Cars:</strong> {{ stats.total }}</span>
+    <span class="stat"><strong>Avg Price:</strong> ${{ stats.avg_price or 'N/A' }}</span>
+    <span class="stat"><strong>Max HP:</strong> {{ stats.max_hp or 'N/A' }}</span>
+    <span class="stat"><strong>Fastest 0-60:</strong> {{ stats.fastest_60 or 'N/A' }}s</span>
+    <span class="stat"><strong>Avg 0-60:</strong> {{ stats.avg_60 or 'N/A' }}s</span>
+</div>
+
+<div class="section">
+    <h2>Add Car to List</h2>
+    <form method="POST" action="/lists/{{ list_id }}/add_item">
+        Car:
+        <select name="car_id">
+            {% for c in available_cars %}
+            <option value="{{ c.c_carid }}">{{ c.car_label }}</option>
+            {% endfor %}
+        </select>
+        Priority:
+        <select name="priority">
+            <option>Must-have</option>
+            <option>Considering</option>
+            <option>Saving up</option>
+            <option>Owned</option>
+        </select>
+        Notes: <input name="notes">
+        <button type="submit">Add</button>
+    </form>
+</div>
+
+<div class="section">
+    <h2>Cars in List</h2>
+    <table>
+        <tr><th>Brand</th><th>Model</th><th>Year</th><th>Price ($)</th>
+            <th>HP</th><th>0-60</th><th>Priority</th><th>Notes</th><th>Actions</th></tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.b_brandname }}</td>
+            <td>{{ item.c_model }}</td>
+            <td>{{ item.c_year }}</td>
+            <td>{{ "{:,.2f}".format(item.c_price) if item.c_price else 'N/A' }}</td>
+            <td>{{ item.c_horsepower }}</td>
+            <td>{{ item.c_zerotosixty }}s</td>
+            <td>{{ item.li_priority }}</td>
+            <td>{{ item.li_notes }}</td>
+            <td>
+                <form method="POST" action="/lists/{{ list_id }}/update_item/{{ item.li_listitemid }}">
+                    <select name="priority">
+                        {% for p in ['Must-have','Considering','Saving up','Owned'] %}
+                        <option {% if item.li_priority == p %}selected{% endif %}>{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                    <input name="notes" value="{{ item.li_notes or '' }}" style="width:120px">
+                    <button type="submit">Update</button>
+                </form>
+                <form method="POST" action="/lists/{{ list_id }}/delete_item/{{ item.li_listitemid }}" style="display:inline">
+                    <button type="submit" onclick="return confirm('Remove this car?')">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

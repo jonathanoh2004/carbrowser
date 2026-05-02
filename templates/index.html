@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>CarBrowser</h1>
+<div class="section">
+    <h2>Database Summary</h2>
+    <span class="stat"><strong>Total Cars:</strong> {{ total_cars }}</span>
+    <span class="stat"><strong>Brands:</strong> {{ total_brands }}</span>
+    <span class="stat"><strong>Users:</strong> {{ total_users }}</span>
+    <span class="stat"><strong>Lists:</strong> {{ total_lists }}</span>
+</div>
+<div class="section">
+    <h2>Top 5 Brands by Car Count</h2>
+    <table>
+        <tr><th>Brand</th><th>Cars</th><th>Avg Price ($)</th><th>Max HP</th></tr>
+        {% for b in top_brands %}
+        <tr>
+            <td>{{ b.b_brandname }}</td>
+            <td>{{ b.car_count }}</td>
+            <td>{{ b.avg_price }}</td>
+            <td>{{ b.max_hp }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

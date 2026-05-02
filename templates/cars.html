@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Browse Cars</h1>
+<div class="section">
+    <form method="GET" action="/cars">
+        Brand: <input name="brand" value="{{ brand_filter }}">
+        Min Price: <input name="min_price" value="{{ min_price }}" style="width:80px">
+        Max Price: <input name="max_price" value="{{ max_price }}" style="width:80px">
+        Sort by:
+        <select name="sort">
+            <option value="c_price" {% if sort=='c_price' %}selected{% endif %}>Price</option>
+            <option value="c_horsepower" {% if sort=='c_horsepower' %}selected{% endif %}>Horsepower</option>
+            <option value="c_year" {% if sort=='c_year' %}selected{% endif %}>Year</option>
+            <option value="c_zerotosixty" {% if sort=='c_zerotosixty' %}selected{% endif %}>0-60</option>
+        </select>
+        <button type="submit">Search</button>
+        <a href="/cars">Clear</a>
+    </form>
+</div>
+<div class="section">
+    <table>
+        <tr><th>Brand</th><th>Model</th><th>Year</th><th>Engine (L)</th>
+            <th>HP</th><th>Torque</th><th>0-60</th><th>Price ($)</th></tr>
+        {% for c in cars %}
+        <tr>
+            <td>{{ c.b_brandname }}</td>
+            <td>{{ c.c_model }}</td>
+            <td>{{ c.c_year }}</td>
+            <td>{{ c.c_enginesize }}</td>
+            <td>{{ c.c_horsepower }}</td>
+            <td>{{ c.c_torque }}</td>
+            <td>{{ c.c_zerotosixty }}s</td>
+            <td>{{ "{:,.2f}".format(c.c_price) if c.c_price else 'N/A' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
