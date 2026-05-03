@@ -38,16 +38,18 @@ psql -U postgres -d carbrowser -f car_project_dump.sql
 ```
 
 It will prompt for your postgres password. You may see some warnings about
-roles not existing — these are harmless and the data will load correctly.
+roles not existing, these are harmless and the data will load correctly.
 
 ### Step 3: Verify the data loaded
 
 In pgAdmin's Query Tool or psql, run:
 
 ```sql
-SELECT COUNT(*) FROM car;
-SELECT COUNT(*) FROM brand;
-SELECT COUNT(*) FROM "user";
+SELECT 'car', COUNT(*) FROM car;
+UNION ALL
+SELECT 'brand', COUNT(*) FROM brand;
+UNION ALL
+SELECT 'user', COUNT(*) FROM "user";
 ```
 
 You should see approximately 1007 cars and 38 brands.
